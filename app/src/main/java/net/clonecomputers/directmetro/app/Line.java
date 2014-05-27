@@ -23,7 +23,7 @@ public class Line {
    * this method returns all of the stations you can transfer
    * to a certain line. if there are none it will return null
    *
-   * @param        String
+   * @param        LineName
    * @return       ArrayList<Station>
    * */
     public ArrayList<Station> getTransfersStations(String LineName){
@@ -52,7 +52,7 @@ public class Line {
 
         for(int i = 0; i < Stations.size(); i++){
             //noinspection EqualsBetweenInconvertibleTypes
-            if(Stations.get(i).equals(StationName)){
+            if(Stations.get(i).getName().equals(StationName)){
                 return Stations.get(i);
             }
         }

@@ -49,7 +49,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String  itemValue  = (String) listView.getItemAtPosition(i);
-                System.out.println(itemValue);
+                System.out.println(con.getDestinationLine(itemValue).getLine());
             }
         });
 
