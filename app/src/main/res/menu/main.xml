@@ -6,4 +6,8 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <ListView
+        android:id="@+id/id_list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 </menu>

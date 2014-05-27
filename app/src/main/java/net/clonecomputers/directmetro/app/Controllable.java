@@ -7,9 +7,9 @@ import java.util.ArrayList;
  */
 public interface Controllable {
 
+    public ArrayList<Line> getLines();
     public void constructData();
-    public ArrayList<Line> getClosetsLines();
-    public ArrayList<Station> getClosetsStations();
+    public Station[] getClosetsStations();
     public Line getDestinationLine(String StationName);
     public Station getDestinationStation(String StationName);
     public ArrayList<Line> getCorrespondingStations(String StationName);

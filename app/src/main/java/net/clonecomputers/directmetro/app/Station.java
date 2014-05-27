@@ -33,7 +33,7 @@ public class Station {
         SwipeNum = swipeNum;
     }
 
-    /*
+    /**
     * returns the name of the station in question
     *
     * @return String
@@ -41,7 +41,7 @@ public class Station {
     public String getName(){
         return Name;
     }
-    /*
+    /**
     * this method checks to see if there are any trasfrus
     *
     * @return boolean           returns true if there are
@@ -51,12 +51,40 @@ public class Station {
         if(Transfers.size() > 0) return true;
         return false;
     }
-    /*
+
+    /**
     * this method returns the all of the transfers in a station
     *
     * @return     ArrayList<Transfer>
     * */
     public ArrayList<Transfer> getTransfers(){
         return Transfers;
+    }
+
+    /**
+    * this method returns all the exits in the Station
+    *
+    * @return ArrayList<Exit>
+    * */
+    public ArrayList<Exit> getExits(){
+        return Exits;
+    }
+
+    /**
+    * this methoed retuns the Logitued of the Station
+    *
+    * @return double
+    * */
+    public double getLong(){
+        return Xcor;
+    }
+
+    /**
+    * this methoed retuns the Latitued of the Station
+    *
+    * @return double
+    * */
+    public double getLat(){
+        return Ycor;
     }
 }

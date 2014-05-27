@@ -9,12 +9,12 @@ public class Exit {
     private double Latitude, longitude;
 
 
-    public Exit(PlatfromLoc exitLocation, double lat, double lon) {
-        ExitLocation = exitLocation;
+    public Exit(int exitLocation, double lat, double lon) {
+        ExitLocation = new PlatfromLoc(exitLocation);
         Latitude = lat;
         longitude = lon;
     }
-    /*
+    /**
     * this method returns the Plaform Location
     * of an exit
     *
@@ -23,18 +23,18 @@ public class Exit {
     public PlatfromLoc getExitLocation(){
         return ExitLocation;
     }
-    /*
+    /**
     * this method gets the Latitude of the Exit
     *
-    * @return   double
+    * @return double
     * */
     public double getLatitude(){
         return Latitude;
     }
-    /*
+    /**
     * this method gets the Longitude of the Exit
     *
-    * @return   double
+    * @return double
     * */
     public double getLongitude(){
         return longitude;

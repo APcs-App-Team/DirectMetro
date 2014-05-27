@@ -19,7 +19,7 @@ public class Line {
         Line = line;
         LineImage = lineImage;
     }
-   /*
+   /**
    * this method returns all of the stations you can transfer
    * to a certain line. if there are none it will return null
    *
@@ -41,7 +41,7 @@ public class Line {
         else return null;
     }
 
-    /*
+    /**
     * this method finds the frist station with the Name spiced
     * if there is no such station the method returns null.
     *
@@ -59,7 +59,7 @@ public class Line {
         return null;
     }
 
-    /*
+    /**
     * this method returns the Stations along the route
     * simply give all of them.
     *
@@ -78,7 +78,7 @@ public class Line {
         return Line;
     }
 
-    /*
+    /**
     * this method returns the Line image URL
     *
     * @return   String

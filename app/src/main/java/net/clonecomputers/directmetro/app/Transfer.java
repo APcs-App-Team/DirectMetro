@@ -19,12 +19,13 @@ public class Transfer {
         LineName = lineName;
         ExitLocation = exitLocation;
     }
-    /*
+
+    /**
     * this method takes the Whole List of Lines and finds the right
     * line object to so to load it into the Transfer. this is not done
     * in the constructor to stop a recursive loop.
     *
-    * @param     ArrayList<Line> lines
+    * @param     ArrayList<Line>
     * */
     public void setTransfureLine(ArrayList<Line> lines){
 
@@ -35,7 +36,8 @@ public class Transfer {
             }
         }
     }
-    /*
+
+    /**
     * this method returns the line that the transfer connects to
     * if the Line has not been set it will return null
     *
@@ -45,7 +47,8 @@ public class Transfer {
         if(isTransSet) return TransfureTo;
         return null;
     }
-    /*
+
+    /**
     * this method returns the Exit Location of the
     * the Transfur
     *
@@ -54,7 +57,8 @@ public class Transfer {
     public PlatfromLoc getExitLocation(){
         return ExitLocation;
     }
-    /*
+
+    /**
     * this method gets the line name which is a
     * String. this method DOSE NOT RETURN THE LINE OBJ
     *
