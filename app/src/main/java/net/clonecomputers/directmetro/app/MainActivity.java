@@ -1,5 +1,7 @@
 package net.clonecomputers.directmetro.app;
 
+import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,9 +12,19 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.BufferedHttpEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -27,7 +39,17 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.MainListView);
-        con = new Controller(40, 50);
+
+        AsyncTask<Void, Integer, String> execute = new DownloadFilesTask().execute((Void[]) null);
+
+        try {
+            con = new Controller(40, 50, execute.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
 
         //loads the Station Data
         Station[] StationObjects = con.getClosetsStations();
@@ -54,7 +76,9 @@ public class MainActivity extends ActionBarActivity {
         });
 
     }
-
+    /*
+    * this methoed is a supporter method for the contorler constructor
+    * */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

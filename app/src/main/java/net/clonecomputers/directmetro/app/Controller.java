@@ -1,11 +1,22 @@
 package net.clonecomputers.directmetro.app;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Created by giorescigno on 5/18/14.
@@ -15,14 +26,15 @@ public class Controller implements Controllable {
     private double userLong, userLat;
     private ArrayList<Line> LineList;
 
-    public Controller(double userLong, double userLat){
+    public Controller(double userLong, double userLat, String StationJson){
         this.userLong = userLong;
         this.userLat = userLat;
-        constructData();
+        constructData(StationJson);
     }
 
     @Override
-    public void constructData(){
+    public void constructData(String yourJsonString) {
+
         ArrayList<Line> temp = new ArrayList<Line>();
         ArrayList<Exit> S1exits = new ArrayList<Exit>();
         S1exits.add(new Exit(2, 12, 27));
@@ -37,28 +49,23 @@ public class Controller implements Controllable {
         S2exits.add(new Exit(2, 12, 66));
 
         ArrayList<Station> Stations = new ArrayList<Station>();
-        Stations.add(new Station(null, "1st Street", S1exits, 12, 25, 100));
-        Stations.add(new Station(null, "2nd Street", S2exits, 12, 43, 100));
-        Stations.add(new Station(null, "3nd Street", S3exits, 12, 43, 100));
+        Stations.add(new Station(null, "1st Street", S1exits, 12, 25, 100, false));
+        Stations.add(new Station(null, "2nd Street", S2exits, 12, 43, 100, false));
+        Stations.add(new Station(null, "3nd Street", S3exits, 12, 43, 100, false));
 
         temp.add(new Line(Stations, "S", "NO IMAGE"));
+
+        ///////////////////////////////////////////////////
+
+
+        /*Gson gson = new Gson();
+        Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String,String> map = gson.fromJson(yourJsonString, stringStringMap);
+
+        System.out.println(map.toString());*/
         LineList = temp;
     }
 
-    private String getRawData(){
-        FileInputStream StationDataRawText = null;
-        try {
-            String FinalString = "";
-            StationDataRawText = new FileInputStream("StationData.json");
-            JSONObject jsonObj = new JSONObject();
-            return "";
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
 
     /*private Map<String, String> JSONParcerOfDoom(String JsonString){
 

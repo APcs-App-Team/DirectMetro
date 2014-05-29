@@ -25,7 +25,7 @@ public class Transfer {
     * line object to so to load it into the Transfer. this is not done
     * in the constructor to stop a recursive loop.
     *
-    * @param     ArrayList<Line>
+    * @param     lines<Line>
     * */
     public void setTransfureLine(ArrayList<Line> lines){
 

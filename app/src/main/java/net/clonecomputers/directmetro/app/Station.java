@@ -2,6 +2,9 @@ package net.clonecomputers.directmetro.app;
 
 import net.clonecomputers.directmetro.app.Exit;
 import net.clonecomputers.directmetro.app.Transfer;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 
@@ -19,11 +22,13 @@ public class Station {
     private ArrayList<Transfer> Transfers;
     private double Xcor, Ycor;
     private int SwipeNum;  //holds the number of metrocard swipes at a given station
+    private ArrayList<String> exitKeys;
+    private boolean hasCrossOver;
 
 
 
     public Station(ArrayList<Transfer> transfers, String name, ArrayList<Exit> exits,
-                   double xcor, double ycor, int swipeNum){
+                   double xcor, double ycor, int swipeNum, boolean cross){
 
         Transfers = transfers;
         Name = name;
@@ -31,6 +36,19 @@ public class Station {
         Xcor = xcor;
         Ycor = ycor;
         SwipeNum = swipeNum;
+        exitKeys = HelperExitKeys();
+        hasCrossOver = cross;
+    }
+
+    /**
+    * this method is a helper method that gets the key map
+    * and returns the keys
+    *
+    * @return  ArrayList<String>
+    * @todo finnish this method
+    * */
+    private ArrayList<String> HelperExitKeys(){
+        return null;
     }
 
     /**
@@ -48,8 +66,7 @@ public class Station {
     * returns false if there are not
     * */
     public boolean hasTransfers(){
-        if(Transfers.size() > 0) return true;
-        return false;
+        return Transfers.size() > 0;
     }
 
     /**
@@ -71,6 +88,17 @@ public class Station {
     }
 
     /**
+     * this method gets the keys of the Station both
+     * for the larger data file which contates all of the
+     * Swipe data
+     *
+     * @return ArrayList<String>
+     * */
+    public ArrayList<String> getStationKey(){
+        return exitKeys;
+    }
+
+    /**
     * this methoed retuns the Logitued of the Station
     *
     * @return double
@@ -80,11 +108,20 @@ public class Station {
     }
 
     /**
-    * this methoed retuns the Latitued of the Station
+    * this method returns the Latitued of the Station
     *
     * @return double
     * */
     public double getLat(){
         return Ycor;
+    }
+
+    /**
+     * this methoed returns weather or not a station has a cross over
+     *
+     * @return boolean
+     * */
+    public boolean isCrossOver(){
+        return hasCrossOver;
     }
 }

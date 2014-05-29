@@ -1,5 +1,6 @@
 package net.clonecomputers.directmetro.app;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 public interface Controllable {
 
     public ArrayList<Line> getLines();
-    public void constructData();
+    public void constructData(String yourJsonString);
     public Station[] getClosetsStations();
     public Line getDestinationLine(String StationName);
     public Station getDestinationStation(String StationName);
