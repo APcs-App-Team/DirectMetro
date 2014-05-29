@@ -16,6 +16,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -34,6 +35,14 @@ public class Controller implements Controllable {
 
     @Override
     public void constructData(String yourJsonString) {
+
+        Gson gson = new Gson();
+        JsonStationObj[] entrys = gson.fromJson(yourJsonString, JsonStationObj[].class);
+
+        for(int i = 0; i < 20; i++){
+
+            System.out.println(entrys[i].station_name + " " + entrys[i].route1);
+        }
 
         ArrayList<Line> temp = new ArrayList<Line>();
         ArrayList<Exit> S1exits = new ArrayList<Exit>();
@@ -55,21 +64,47 @@ public class Controller implements Controllable {
 
         temp.add(new Line(Stations, "S", "NO IMAGE"));
 
-        ///////////////////////////////////////////////////
-
-
-        /*Gson gson = new Gson();
-        Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
-        Map<String,String> map = gson.fromJson(yourJsonString, stringStringMap);
-
-        System.out.println(map.toString());*/
         LineList = temp;
     }
 
+    private class JsonStationObj{
+        boolean ada;
+        String corner;
+        String division;
+        String east_west_street;
+        double entrance_latitude;
+        entranceLocation entrance_location;
+        double entrance_longitude;
+        String entrance_type;
+        String entry;
+        boolean free_crossover;
+        String line;
+        String north_south_street;
+        String route1;
+        String route2;
+        String route3;
+        String route4;
+        String route5;
+        String route6;
+        String staffing;
+        double station_latitude;
+        Stationloc station_location;
+        double station_longitude;
+        String station_name;
+        String vending;
 
-    /*private Map<String, String> JSONParcerOfDoom(String JsonString){
+    }
+    private class entranceLocation{
+        double latitude;
+        double longitude;
+        boolean needs_recoding;
+    }
+    private class Stationloc{
+        double latitude;
+        double longitude;
+        boolean needs_recoding;
+    }
 
-    }*/
 
     @Override
     public Station[] getClosetsStations() {
@@ -143,3 +178,4 @@ public class Controller implements Controllable {
         return LineList;
     }
 }
+
