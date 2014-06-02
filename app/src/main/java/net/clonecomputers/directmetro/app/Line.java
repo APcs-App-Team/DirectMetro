@@ -60,6 +60,55 @@ public class Line {
     }
 
     /**
+     * this methoed checks to see if a station object exists
+     * if it dose i returns true if it dose not it returns
+     * false
+     *
+     * @param StationName
+     * @return boolean
+     * */
+    public boolean hasStation(String StationName){
+        for(int i = 0; i < Stations.size(); i++){
+            if(Stations.get(i).getName().equals(StationName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * this methoed gets adds an exit object to a station spesified
+     * by name. if it finds the station and can add the exit it will
+     * return true if it can not find the station it will return false
+     *
+     * @param stationName
+     * @param exitobj
+     *
+     * @return boolean
+     * */
+    public boolean addExit(String stationName, Exit exitobj){
+        for(int i =0; i < Stations.size(); i++){
+            if(Stations.get(i).getName().equals(stationName)){
+                Stations.get(i).addExit(exitobj);
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * this method takes in one Station parameter and
+     * adds it to the array list of stations. it returns
+     * the index at which it was added
+     *
+     * @param newS
+     *@return index
+     * */
+    public int addStation(Station newS){
+        Stations.add((Station)newS);
+        return Stations.size()-1;
+    }
+
+    /**
     * this method returns the Stations along the route
     * simply give all of them.
     *

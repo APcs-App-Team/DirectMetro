@@ -18,8 +18,8 @@ public class Station {
 
     private String Name;//holds the name of the Station
     private double Distance;
-    private ArrayList<Exit> Exits;
-    private ArrayList<Transfer> Transfers;
+    private ArrayList<Exit> Exits = new ArrayList<Exit>();
+    private ArrayList<Transfer> Transfers = new ArrayList<Transfer>();
     private double Xcor, Ycor;
     private int SwipeNum;  //holds the number of metrocard swipes at a given station
     private ArrayList<String> exitKeys;
@@ -37,6 +37,13 @@ public class Station {
         Ycor = ycor;
         SwipeNum = swipeNum;
         exitKeys = HelperExitKeys();
+        hasCrossOver = cross;
+    }
+
+    public Station(String name, double xcor, double ycor, boolean cross){
+        Name = name;
+        Xcor = xcor;
+        Ycor = ycor;
         hasCrossOver = cross;
     }
 
@@ -123,5 +130,13 @@ public class Station {
      * */
     public boolean isCrossOver(){
         return hasCrossOver;
+    }
+    /**
+     * this methoed adds an exit to the Station
+     *
+     * @param exit
+     * */
+    public void addExit(Exit exit){
+        Exits.add(exit);
     }
 }

@@ -36,15 +36,44 @@ public class Controller implements Controllable {
     @Override
     public void constructData(String yourJsonString) {
 
-        Gson gson = new Gson();
+        Gson gson = new Gson();//crates a new json object
         JsonStationObj[] entrys = gson.fromJson(yourJsonString, JsonStationObj[].class);
 
-        for(int i = 0; i < 20; i++){
+        ArrayList<Line> LineTemp = new ArrayList<Line>();
+        for(int i = 0; i < entrys.length; i++){
+            int lineIndex;
 
-            System.out.println(entrys[i].station_name + " " + entrys[i].route1);
+            if((lineIndex = hasLine(LineTemp, entrys[i].route1)) != -1){
+                //creates a temporagry exit object
+                Exit tempNewExit = new Exit(0, entrys[i].entrance_latitude, entrys[i].entrance_longitude);
+                //this if statment checks to see if an exit was seucsefuly added if not it will add a new station
+                if(!LineTemp.get(lineIndex).addExit(entrys[i].station_name, tempNewExit)){
+                    //adds new station
+                    LineTemp.get(lineIndex).addStation(new
+                            Station(entrys[i].station_name, entrys[i].station_latitude,
+                            entrys[i].station_longitude, entrys[i].free_crossover)
+                    );
+                    LineTemp.get(lineIndex).addExit(entrys[i].station_name, tempNewExit);
+                }
+            }else{
+
+                ArrayList<Station> tempStationArrayList = new ArrayList<Station>();
+
+                tempStationArrayList.add(new Station(
+                        entrys[i].station_name, entrys[i].station_latitude,
+                        entrys[i].station_longitude, entrys[i].free_crossover)
+                );
+
+                Exit tempExit = new Exit(0, entrys[i].entrance_latitude, entrys[i].entrance_longitude);
+
+                LineTemp.add(new Line(tempStationArrayList, entrys[i].route1, ""));
+                LineTemp.get(LineTemp.size()-1).addExit(entrys[i].station_name, tempExit);
+                System.out.println(entrys[i].route1 + " hasLine: " + hasLine(LineTemp, entrys[i].route1));
+                System.out.println("Entrys: " + i + "/" + entrys.length);
+            }
         }
 
-        ArrayList<Line> temp = new ArrayList<Line>();
+        /*ArrayList<Line> temp = new ArrayList<Line>();
         ArrayList<Exit> S1exits = new ArrayList<Exit>();
         S1exits.add(new Exit(2, 12, 27));
         S1exits.add(new Exit(1, 12, 22));
@@ -62,49 +91,9 @@ public class Controller implements Controllable {
         Stations.add(new Station(null, "2nd Street", S2exits, 12, 43, 100, false));
         Stations.add(new Station(null, "3nd Street", S3exits, 12, 43, 100, false));
 
-        temp.add(new Line(Stations, "S", "NO IMAGE"));
-
-        LineList = temp;
+        temp.add(new Line(Stations, "S", "NO IMAGE"));*/
+        LineList = LineTemp;
     }
-
-    private class JsonStationObj{
-        boolean ada;
-        String corner;
-        String division;
-        String east_west_street;
-        double entrance_latitude;
-        entranceLocation entrance_location;
-        double entrance_longitude;
-        String entrance_type;
-        String entry;
-        boolean free_crossover;
-        String line;
-        String north_south_street;
-        String route1;
-        String route2;
-        String route3;
-        String route4;
-        String route5;
-        String route6;
-        String staffing;
-        double station_latitude;
-        Stationloc station_location;
-        double station_longitude;
-        String station_name;
-        String vending;
-
-    }
-    private class entranceLocation{
-        double latitude;
-        double longitude;
-        boolean needs_recoding;
-    }
-    private class Stationloc{
-        double latitude;
-        double longitude;
-        boolean needs_recoding;
-    }
-
 
     @Override
     public Station[] getClosetsStations() {
@@ -126,12 +115,16 @@ public class Controller implements Controllable {
                     Nearest[2] = Nearest[1];
                     Nearest[1] = temp;
 
+                }else if(Nearest[1] == null){
+                    Nearest[1] = stations;
                 }else if(CurrentDistance < Math.sqrt(Math.pow(Nearest[1].getLat() - userLat, 2) +
                         Math.pow(Nearest[1].getLong() - userLong, 2))){
                     Station temp = Nearest[1];
                     Nearest[1] = stations;
                     Nearest[2] = temp;
 
+                }else if(Nearest[2] == null){
+                    Nearest[2] = stations;
                 }else if(CurrentDistance < Math.sqrt(Math.pow(Nearest[2].getLat() - userLat, 2) +
                         Math.pow(Nearest[2].getLong() - userLong, 2))){
                     Nearest[2] = stations;
@@ -139,6 +132,20 @@ public class Controller implements Controllable {
             }
         }
         return Nearest;
+    }
+    /**
+     * this method finds if the line exists
+     *
+     * @param testLineArray<Line>
+     * @param line
+     *
+     * @return boolean
+     * */
+    private int hasLine(ArrayList<Line> testLineArray, String line){
+        for(int i = 0; i < testLineArray.size(); i++){
+            if(testLineArray.get(i).getLine().equals(line)) return i;
+        }
+        return -1;
     }
 
     @Override
@@ -176,6 +183,43 @@ public class Controller implements Controllable {
 
     public ArrayList<Line> getLines(){
         return LineList;
+    }
+    private class JsonStationObj{
+        boolean ada;
+        String corner;
+        String division;
+        String east_west_street;
+        double entrance_latitude;
+        entranceLocation entrance_location;
+        double entrance_longitude;
+        String entrance_type;
+        String entry;
+        boolean free_crossover;
+        String line;
+        String north_south_street;
+        String route1;
+        String route2;
+        String route3;
+        String route4;
+        String route5;
+        String route6;
+        String staffing;
+        double station_latitude;
+        Stationloc station_location;
+        double station_longitude;
+        String station_name;
+        String vending;
+
+    }
+    private class entranceLocation{
+        double latitude;
+        double longitude;
+        boolean needs_recoding;
+    }
+    private class Stationloc{
+        double latitude;
+        double longitude;
+        boolean needs_recoding;
     }
 }
 
