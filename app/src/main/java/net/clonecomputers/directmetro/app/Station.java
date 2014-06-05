@@ -69,6 +69,19 @@ public class Station implements Comparable{
     }
 
     /**
+     * this method takes a list of strings an turns it
+     * and adds it to the trasfurs array
+     *
+     * @param Trasfurlist
+     * */
+    public void addTransfers(String[] Trasfurlist, String CurrentLine){
+        for(String transfer : Trasfurlist){
+            if(!(transfer == null || transfer.equals(CurrentLine)))
+                Transfers.add(new Transfer(transfer, new PlatfromLoc(1)));
+        }
+    }
+
+    /**
     * this method is a helper method that gets the key map
     * and returns the keys
     *

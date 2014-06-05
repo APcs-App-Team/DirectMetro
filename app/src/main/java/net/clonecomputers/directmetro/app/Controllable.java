@@ -14,5 +14,6 @@ public interface Controllable {
     public Line getDestinationLine(String StationName);
     public Station getDestinationStation(String StationName);
     public ArrayList<Line> getCorrespondingStations(String StationName);
+    public Line getLine(String name);
 
 }

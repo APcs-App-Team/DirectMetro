@@ -49,6 +49,9 @@ public class Controller implements Controllable {
                                 )
                         );
                         LineTemp.get(lineIndex).addExit(entrys[i].station_name, tempNewExit);
+                        if(routes.length > 1){
+                            LineTemp.get(lineIndex).getStation(entrys[i].station_name).addTransfers(routes, routes[z]);
+                        }
                     }
                 } else {
 
