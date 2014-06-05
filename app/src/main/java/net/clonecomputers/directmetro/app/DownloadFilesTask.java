@@ -43,7 +43,6 @@ public class DownloadFilesTask extends AsyncTask<Void, Integer, String> {
         String yourJsonString = "";
         String line;
         while ((line = r.readLine()) != null) {
-            System.out.println("Prosseing "+line);
             yourJsonString += (line + "\n");
         }
         System.out.println(yourJsonString.length());

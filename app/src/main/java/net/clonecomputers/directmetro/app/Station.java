@@ -7,6 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by giorescigno on 5/13/14.
@@ -14,21 +15,21 @@ import java.util.ArrayList;
  * this holds all the data need for a station included
  * TrainLines that stop at it.
  */
-public class Station {
+public class Station implements Comparable{
 
     private String Name;//holds the name of the Station
-    private double Distance;
     private ArrayList<Exit> Exits = new ArrayList<Exit>();
     private ArrayList<Transfer> Transfers = new ArrayList<Transfer>();
     private double Xcor, Ycor;
     private int SwipeNum;  //holds the number of metrocard swipes at a given station
     private ArrayList<String> exitKeys;
     private boolean hasCrossOver;
+    private double Distance;
 
 
 
     public Station(ArrayList<Transfer> transfers, String name, ArrayList<Exit> exits,
-                   double xcor, double ycor, int swipeNum, boolean cross){
+                   double xcor, double ycor, int swipeNum, boolean cross, double distance){
 
         Transfers = transfers;
         Name = name;
@@ -36,15 +37,35 @@ public class Station {
         Xcor = xcor;
         Ycor = ycor;
         SwipeNum = swipeNum;
+        Distance = distance;
         exitKeys = HelperExitKeys();
         hasCrossOver = cross;
     }
 
-    public Station(String name, double xcor, double ycor, boolean cross){
+    public Station(String name, double xcor, double ycor, boolean cross, double distance){
         Name = name;
         Xcor = xcor;
         Ycor = ycor;
         hasCrossOver = cross;
+        Distance = distance;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        //if the object suplyed is not a Station object
+        if(!(o instanceof Station)){
+            throw new ClassCastException();
+        }
+
+        Station tempStation = (Station)o;
+
+        if(tempStation.getDistance() > Distance)
+            return -1;
+
+        else if(tempStation.getDistance() < Distance)
+            return 1;
+
+        return 0;
     }
 
     /**
@@ -131,6 +152,7 @@ public class Station {
     public boolean isCrossOver(){
         return hasCrossOver;
     }
+
     /**
      * this methoed adds an exit to the Station
      *
@@ -138,5 +160,15 @@ public class Station {
      * */
     public void addExit(Exit exit){
         Exits.add(exit);
+    }
+
+    /**
+     * this method retuns the distance betewn a
+     * user and this station
+     *
+     * @return Distance
+     * */
+    public double getDistance(){
+        return Distance;
     }
 }

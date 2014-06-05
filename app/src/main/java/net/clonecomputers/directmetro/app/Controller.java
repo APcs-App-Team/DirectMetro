@@ -1,23 +1,10 @@
 package net.clonecomputers.directmetro.app;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Scanner;
 
 /**
  * Created by giorescigno on 5/18/14.
@@ -41,35 +28,46 @@ public class Controller implements Controllable {
 
         ArrayList<Line> LineTemp = new ArrayList<Line>();
         for(int i = 0; i < entrys.length; i++){
-            int lineIndex;
+            String[] routes = {
+                    entrys[i].route1, entrys[i].route2, entrys[i].route3, entrys[i].route4,
+                    entrys[i].route4, entrys[i].route6};
 
-            if((lineIndex = hasLine(LineTemp, entrys[i].route1)) != -1){
-                //creates a temporagry exit object
-                Exit tempNewExit = new Exit(0, entrys[i].entrance_latitude, entrys[i].entrance_longitude);
-                //this if statment checks to see if an exit was seucsefuly added if not it will add a new station
-                if(!LineTemp.get(lineIndex).addExit(entrys[i].station_name, tempNewExit)){
-                    //adds new station
-                    LineTemp.get(lineIndex).addStation(new
-                            Station(entrys[i].station_name, entrys[i].station_latitude,
-                            entrys[i].station_longitude, entrys[i].free_crossover)
+            for(int z = 0; z < routes.length && routes[z] != null; z++) {
+                int lineIndex;
+
+                if ((lineIndex = hasLine(LineTemp, routes[z])) != -1) {
+                    //creates a temporagry exit object
+                    Exit tempNewExit = new Exit(0, entrys[i].entrance_latitude, entrys[i].entrance_longitude);
+                    //this if statment checks to see if an exit was seucsefuly added if not it will add a new station
+                    if (!LineTemp.get(lineIndex).addExit(entrys[i].station_name, tempNewExit)) {
+                        //adds new station
+                        LineTemp.get(lineIndex).addStation(new
+                                        Station(entrys[i].station_name, entrys[i].station_latitude,
+                                        entrys[i].station_longitude, entrys[i].free_crossover,
+                                        getStationDistance(entrys[i].station_latitude,
+                                                entrys[i].station_longitude)
+                                )
+                        );
+                        LineTemp.get(lineIndex).addExit(entrys[i].station_name, tempNewExit);
+                    }
+                } else {
+
+                    ArrayList<Station> tempStationArrayList = new ArrayList<Station>();
+
+                    tempStationArrayList.add(new Station(
+                                    entrys[i].station_name, entrys[i].station_latitude,
+                                    entrys[i].station_longitude, entrys[i].free_crossover,
+                                    getStationDistance(entrys[i].station_latitude,
+                                            entrys[i].station_longitude)
+                            )
                     );
-                    LineTemp.get(lineIndex).addExit(entrys[i].station_name, tempNewExit);
+
+                    Exit tempExit = new Exit(0, entrys[i].entrance_latitude, entrys[i].entrance_longitude);
+
+                    LineTemp.add(new Line(tempStationArrayList, routes[z], ""));
+                    LineTemp.get(LineTemp.size() - 1).addExit(entrys[i].station_name, tempExit);
+
                 }
-            }else{
-
-                ArrayList<Station> tempStationArrayList = new ArrayList<Station>();
-
-                tempStationArrayList.add(new Station(
-                        entrys[i].station_name, entrys[i].station_latitude,
-                        entrys[i].station_longitude, entrys[i].free_crossover)
-                );
-
-                Exit tempExit = new Exit(0, entrys[i].entrance_latitude, entrys[i].entrance_longitude);
-
-                LineTemp.add(new Line(tempStationArrayList, entrys[i].route1, ""));
-                LineTemp.get(LineTemp.size()-1).addExit(entrys[i].station_name, tempExit);
-                System.out.println(entrys[i].route1 + " hasLine: " + hasLine(LineTemp, entrys[i].route1));
-                System.out.println("Entrys: " + i + "/" + entrys.length);
             }
         }
 
@@ -98,40 +96,22 @@ public class Controller implements Controllable {
     @Override
     public Station[] getClosetsStations() {
 
-        Station[] Nearest = new Station[3];
+        ArrayList<Station> closetStation = new ArrayList<Station>();
 
-        for(Line Lines : LineList){
-            for(Station stations : Lines.getStations()){
+        for(int i = 0; i < LineList.size(); i++){
 
-                double CurrentDistance = Math.sqrt(Math.pow(stations.getLat() - userLat, 2) + Math.pow(stations.getLong() - userLong, 2));
+            Station[] stationsTemp = LineList.get(i).getStations().toArray(
+                    new Station[LineList.get(i).getStations().size()]
+            );
+            Arrays.sort(stationsTemp);
+            closetStation.add(stationsTemp[0]);
 
-                if(Nearest[0] == null){
-                    Nearest[0] = stations;
-
-                }else if(CurrentDistance < Math.sqrt(Math.pow(Nearest[0].getLat() - userLat, 2) +
-                        Math.pow(Nearest[0].getLong() - userLong, 2))){
-                    Station temp = Nearest[0];
-                    Nearest[0] = stations;
-                    Nearest[2] = Nearest[1];
-                    Nearest[1] = temp;
-
-                }else if(Nearest[1] == null){
-                    Nearest[1] = stations;
-                }else if(CurrentDistance < Math.sqrt(Math.pow(Nearest[1].getLat() - userLat, 2) +
-                        Math.pow(Nearest[1].getLong() - userLong, 2))){
-                    Station temp = Nearest[1];
-                    Nearest[1] = stations;
-                    Nearest[2] = temp;
-
-                }else if(Nearest[2] == null){
-                    Nearest[2] = stations;
-                }else if(CurrentDistance < Math.sqrt(Math.pow(Nearest[2].getLat() - userLat, 2) +
-                        Math.pow(Nearest[2].getLong() - userLong, 2))){
-                    Nearest[2] = stations;
-                }
-            }
         }
-        return Nearest;
+        Station[] closestStationsArray = closetStation.toArray(
+                new Station[closetStation.size()]
+        );
+        Arrays.sort(closestStationsArray);
+        return Arrays.copyOfRange(closestStationsArray, 0, 3);
     }
     /**
      * this method finds if the line exists
@@ -142,6 +122,7 @@ public class Controller implements Controllable {
      * @return boolean
      * */
     private int hasLine(ArrayList<Line> testLineArray, String line){
+
         for(int i = 0; i < testLineArray.size(); i++){
             if(testLineArray.get(i).getLine().equals(line)) return i;
         }
@@ -171,6 +152,27 @@ public class Controller implements Controllable {
             Station temp = SearchLine.getStation(StationName);
             if(temp != null){
                 return temp;
+            }
+        }
+        return null;
+    }
+
+    private double getStationDistance(double StationLat, double StationLong){
+        double xResalt = Math.pow(Math.abs(StationLong - userLong), 2);
+        double yResalt = Math.pow(Math.abs(StationLat - userLat), 2);
+        return Math.sqrt(xResalt + yResalt);
+    }
+    /**
+     * this method gets a line baced off of its Name
+     * and then returns a Line object
+     *
+     * @param name
+     * @return Line
+     * */
+    public Line getLine(String name){
+        for(int i = 0; i < LineList.size(); i++){
+            if(LineList.get(i).getLine().equals(name)){
+                return LineList.get(i);
             }
         }
         return null;

@@ -1,9 +1,16 @@
 package net.clonecomputers.directmetro.app;
 
+import android.content.Context;
+import android.content.Intent;
+import android.location.GpsStatus;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import android.location.LocationListener;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -40,16 +47,20 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.MainListView);
 
+
         AsyncTask<Void, Integer, String> execute = new DownloadFilesTask().execute((Void[]) null);
+        //Location phoneLocation = getCurrentLocation();
+
+        //System.out.println(phoneLocation instanceof Location);
 
         try {
-            con = new Controller(40, 50, execute.get());
+            con = new Controller(-73.99188, 40.68610, execute.get());
+            //con = new Controller(getCurrentLocation().getLongitude(), getCurrentLocation().getLatitude(), execute.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
 
         //loads the Station Data
         Station[] StationObjects = con.getClosetsStations();
@@ -72,6 +83,8 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String  itemValue  = (String) listView.getItemAtPosition(i);
                 System.out.println(con.getDestinationLine(itemValue).getLine());
+                System.out.println(con.getClosetsStations()[i].getLat());
+                System.out.println(con.getClosetsStations()[i].getLong());
             }
         });
 
@@ -97,5 +110,34 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private Location getCurrentLocation(){
+
+        //LocationManager mgr =
+        //        (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        //System.out.println(carrierName);
+        LocationManager locationManager =
+                (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        final boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        final boolean isNetworkEnabled = locationManager
+                .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        Location location = null;
+        System.out.println("GPS PROVIDER: " + LocationManager.GPS_PROVIDER);
+        System.out.println("GPS IS: " + gpsEnabled);
+
+        if(!gpsEnabled)
+            enableLocationSettings();
+        else{
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        //System.out.println(location == null);
+        return location;
+    }
+
+    private void enableLocationSettings() {
+        Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(settingsIntent);
     }
 }
