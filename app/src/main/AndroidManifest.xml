@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.clonecomputers.directmetro.app" >
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
 
@@ -19,6 +20,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="net.clonecomputers.directmetro.app.Directions"
+            android:label="@string/title_activity_directions" >
+        </activity>
+        <activity
+            android:name="net.clonecomputers.directmetro.app.StationSelect"
+            android:label="@string/title_activity_station_select" >
         </activity>
     </application>
 

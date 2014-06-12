@@ -4,5 +4,7 @@
     <string name="app_name">Direct Metro</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_directions">Directions</string>
+    <string name="title_activity_station_select">StationSelect</string>
 
 </resources>

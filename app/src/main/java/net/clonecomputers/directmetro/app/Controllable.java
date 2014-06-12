@@ -10,10 +10,11 @@ public interface Controllable {
 
     public ArrayList<Line> getLines();
     public void constructData(String yourJsonString);
-    public Station[] getClosetsStations();
+    public Station[] getClosetsStations(String Des);
     public Line getDestinationLine(String StationName);
     public Station getDestinationStation(String StationName);
     public ArrayList<Line> getCorrespondingStations(String StationName);
     public Line getLine(String name);
+    public ArrayList<String> getRoute(Station Start, String end) throws NullPointerException;
 
 }

@@ -25,11 +25,12 @@ public class Station implements Comparable{
     private ArrayList<String> exitKeys;
     private boolean hasCrossOver;
     private double Distance;
+    private String line;
 
 
 
     public Station(ArrayList<Transfer> transfers, String name, ArrayList<Exit> exits,
-                   double xcor, double ycor, int swipeNum, boolean cross, double distance){
+                   double xcor, double ycor, int swipeNum, boolean cross, double distance, String line){
 
         Transfers = transfers;
         Name = name;
@@ -38,16 +39,18 @@ public class Station implements Comparable{
         Ycor = ycor;
         SwipeNum = swipeNum;
         Distance = distance;
+        this.line = line;
         exitKeys = HelperExitKeys();
         hasCrossOver = cross;
     }
 
-    public Station(String name, double xcor, double ycor, boolean cross, double distance){
+    public Station(String name, double xcor, double ycor, boolean cross, double distance, String Line){
         Name = name;
         Xcor = xcor;
         Ycor = ycor;
         hasCrossOver = cross;
         Distance = distance;
+        line = Line;
     }
 
     @Override
@@ -184,4 +187,13 @@ public class Station implements Comparable{
     public double getDistance(){
         return Distance;
     }
-}
+    /**
+     * this mehoded retuns the Line that this station
+     * is a part of
+     *
+     * @return Line
+     * */
+    public String getLine(){
+        return line;
+    }
+ }

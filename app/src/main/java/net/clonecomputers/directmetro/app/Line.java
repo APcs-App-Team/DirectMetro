@@ -40,6 +40,23 @@ public class Line {
         if(temp.size() > 0) return temp;
         else return null;
     }
+    /**
+     * this method returns all of the stations you can transfer
+     * to a certain line. if there are none it will return null
+     *
+     * @return       ArrayList<Station>
+     * */
+    public ArrayList<Station> getTransferStations(){
+
+        ArrayList<Station> temp = new ArrayList<Station>();
+
+        for(int i = 0; i < Stations.size(); i++){
+            if(Stations.get(i).hasTransfers()){
+                temp.add(Stations.get(i));
+            }
+        }
+        return temp;
+    }
 
     /**
     * this method finds the frist station with the Name spiced

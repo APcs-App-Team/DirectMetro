@@ -23,6 +23,7 @@ public class Controller implements Controllable {
     @Override
     public void constructData(String yourJsonString) {
 
+        System.out.println(yourJsonString);
         Gson gson = new Gson();//crates a new json object
         JsonStationObj[] entrys = gson.fromJson(yourJsonString, JsonStationObj[].class);
 
@@ -36,8 +37,11 @@ public class Controller implements Controllable {
                 int lineIndex;
 
                 if ((lineIndex = hasLine(LineTemp, routes[z])) != -1) {
+
                     //creates a temporagry exit object
-                    Exit tempNewExit = new Exit(0, entrys[i].entrance_latitude, entrys[i].entrance_longitude);
+                    Exit tempNewExit = new Exit(0, entrys[i].entrance_latitude,
+                            entrys[i].entrance_longitude);
+
                     //this if statment checks to see if an exit was seucsefuly added if not it will add a new station
                     if (!LineTemp.get(lineIndex).addExit(entrys[i].station_name, tempNewExit)) {
                         //adds new station
@@ -46,13 +50,16 @@ public class Controller implements Controllable {
                                         entrys[i].station_longitude, entrys[i].free_crossover,
                                         getStationDistance(entrys[i].station_latitude,
                                                 entrys[i].station_longitude)
-                                )
+                                , routes[z])
                         );
                         LineTemp.get(lineIndex).addExit(entrys[i].station_name, tempNewExit);
+                        //creates a new trasfurs if there are some
                         if(routes.length > 1){
-                            LineTemp.get(lineIndex).getStation(entrys[i].station_name).addTransfers(routes, routes[z]);
+                            LineTemp.get(lineIndex).getStation(entrys[i].station_name).addTransfers(
+                                    routes, routes[z]);
                         }
                     }
+
                 } else {
 
                     ArrayList<Station> tempStationArrayList = new ArrayList<Station>();
@@ -61,7 +68,7 @@ public class Controller implements Controllable {
                                     entrys[i].station_name, entrys[i].station_latitude,
                                     entrys[i].station_longitude, entrys[i].free_crossover,
                                     getStationDistance(entrys[i].station_latitude,
-                                            entrys[i].station_longitude)
+                                            entrys[i].station_longitude), routes[z]
                             )
                     );
 
@@ -97,7 +104,7 @@ public class Controller implements Controllable {
     }
 
     @Override
-    public Station[] getClosetsStations() {
+    public Station[] getClosetsStations(String Des) {
 
         ArrayList<Station> closetStation = new ArrayList<Station>();
 
@@ -114,9 +121,66 @@ public class Controller implements Controllable {
                 new Station[closetStation.size()]
         );
         Arrays.sort(closestStationsArray);
-        return Arrays.copyOfRange(closestStationsArray, 0, 3);
+
+        //return Arrays.copyOfRange(closestStationsArray, 0, 3);
+        return getWorkingCloset(closestStationsArray, Des);
     }
     /**
+     * this method
+     * */
+    private Station[] getWorkingCloset(Station[] sortedArray, String Des){
+
+        Station[] working = new Station[3];
+        int internalWorking = 0;
+
+        for(int i = 0; i < sortedArray.length && internalWorking < 3; i++){
+
+            if(getRoute(sortedArray[i], Des) != null) {
+                working[internalWorking] = sortedArray[i];
+                internalWorking++;
+            }
+        }
+
+        return working;
+    }
+
+    /**
+     * this method takes in the Starting Station and the ending station
+     * name and then returns the route ArrayList
+     * EX:
+     * {"Start: 1st Street", "Front", "Line: 1", "Transfer: 2st",
+     *              "Street Line: 2", "Middle", "End: 4th Street", "Line: 2", "Back"}
+     *
+     * @param Start
+     * @param end
+     *
+     * @return route
+     * */
+    public ArrayList<String> getRoute(Station Start, String end){
+
+        ArrayList<String> actions = new ArrayList<String>();
+        ArrayList<Line> candidates = new ArrayList<Line>();
+        Line stationLines = getLine(Start.getLine());
+        boolean atDest = false;
+
+        actions.add("Start: " + Start.getName());
+        actions.add("Line: " + Start.getLine());
+        actions.add("Middle");
+
+        if(stationLines.hasStation(end)){
+            atDest = true;
+            actions.add("End: " + stationLines.getStation(end).getName());
+            actions.add("Line: " + stationLines.getLine());
+            actions.add("Middle");
+        }
+        if(atDest)
+            return actions;
+        else{
+            return null;
+        }
+    }
+
+     /**
      * this method finds if the line exists
      *
      * @param testLineArray<Line>
