@@ -130,18 +130,19 @@ public class Controller implements Controllable {
      * */
     private Station[] getWorkingCloset(Station[] sortedArray, String Des){
 
-        Station[] working = new Station[3];
+        ArrayList<Station> working = new ArrayList<Station>();
+        //Station[] working = new Station[3];
         int internalWorking = 0;
 
         for(int i = 0; i < sortedArray.length && internalWorking < 3; i++){
 
             if(getRoute(sortedArray[i], Des) != null) {
-                working[internalWorking] = sortedArray[i];
+                working.add(sortedArray[i]);
                 internalWorking++;
             }
         }
 
-        return working;
+        return working.toArray(new Station[working.size()]);
     }
 
     /**

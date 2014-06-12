@@ -44,10 +44,11 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="38dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Select Starting Station"
-            android:id="@+id/textView" />
+            android:text="Closet Station"
+            android:id="@+id/textView"
+            android:layout_marginTop="15px" />
 
         <ListView
             android:layout_width="wrap_content"
