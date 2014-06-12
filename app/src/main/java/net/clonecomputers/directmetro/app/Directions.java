@@ -31,7 +31,7 @@ public class Directions extends ActionBarActivity {
         ListView listView = (ListView) findViewById(R.id.listView);
         int count = 0;
         for(int i = 0; i < directions.length; i+=3){
-            dir_raw[count] = directions[i] + "             (" + directions[i+1] + ")\n"+
+            dir_raw[count] = getSpaces(directions[i]) + "  (" + directions[i+1] + ")\n"+
                     directions[i+2];
             count++;
         }
@@ -73,5 +73,17 @@ public class Directions extends ActionBarActivity {
         intent.putExtra(EXTRA_MESSAGE, message);
 
         startActivity(intent);
+    }
+
+    private String getSpaces(String Message){
+        int totalSpace = 50;
+        int spaceNeed = Message.length() - 50;
+        String formatedMessage = Message;
+
+        for(int i = totalSpace; i > 0; i--){
+            formatedMessage += " ";
+        }
+        return formatedMessage;
+
     }
 }
