@@ -164,14 +164,14 @@ public class Controller implements Controllable {
         Line stationLines = getLine(Start.getLine());
         boolean atDest = false;
 
-        actions.add("Start: " + Start.getName());
-        actions.add("Line: " + Start.getLine());
+        actions.add(Start.getName());
+        actions.add(Start.getLine());
         actions.add("Middle");
 
         if(stationLines.hasStation(end)){
             atDest = true;
-            actions.add("End: " + stationLines.getStation(end).getName());
-            actions.add("Line: " + stationLines.getLine());
+            actions.add(stationLines.getStation(end).getName());
+            actions.add(stationLines.getLine());
             actions.add("Middle");
         }
         if(atDest)

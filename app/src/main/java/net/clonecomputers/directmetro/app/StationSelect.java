@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 
@@ -22,6 +23,7 @@ public class StationSelect extends ActionBarActivity {
     private Controller con;
     private String Destination;
     private ListView listView;
+    public final static String DIRECTION_KEY = "net.clonecomputers.DirectMetro.DIR";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class StationSelect extends ActionBarActivity {
                 System.out.println(con.getDestinationLine(itemValue).getLine());
                 System.out.println(con.getClosetsStations(Destination)[i].getLat());
                 System.out.println(con.getClosetsStations(Destination)[i].getLong());
+                startDirections(itemValue, Destination);
             }
         });
 
@@ -94,5 +97,17 @@ public class StationSelect extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    /**
+     * this method sends the Direction Data to the Direction Activity
+     * */
+    private void startDirections(String Start, String End){
+
+        Station start = con.getDestinationStation(Start);
+        ArrayList<String> Directions = con.getRoute(start, End);
+
+        Intent intent = new Intent(this, Directions.class);
+        intent.putExtra(DIRECTION_KEY, Directions.toArray(new String[Directions.size()]));
+        startActivity(intent);
     }
 }

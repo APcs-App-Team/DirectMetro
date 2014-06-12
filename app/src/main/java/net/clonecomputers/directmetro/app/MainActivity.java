@@ -39,10 +39,7 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends ActionBarActivity {
 
-    private Controller con;
-    private ListView listView;
-    public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-    public final static String DATASTRUCT_MESSAGE = "com.example.myfirstapp.DATA";
+    public final static String EXTRA_MESSAGE = "net.clonecomputers.DirectMetro.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
